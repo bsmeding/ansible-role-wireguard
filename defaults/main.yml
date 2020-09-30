@@ -24,6 +24,12 @@ wireguard_conf_mode: 0600
 # Template name to use
 wireguard_interface_template: "wg.conf.j2"
 
+# group name for endpoints, when not using mash network
+#wireguard_endpoint_groupname: ''
+
+wireguard_additional_packages_debian:
+  - openresolv
+  - ufw
 #######################################
 # Settings only relevant for Ubuntu
 #######################################

@@ -12,6 +12,12 @@
     name:
       - "linux-headers-{{ ansible_kernel }}"
     state: present
+    
+- name: (Debian) Install additional packages
+  apt:
+    name: "{{ wireguard_additional_packages_debian }}"
+    state: present
+  when: wireguard_additional_packages_debian is defined and wireguard_additional_packages_debian|length>0
 
 - name: (Debian) Get architecture
   command: "dpkg --print-architecture"
