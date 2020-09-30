@@ -4,6 +4,7 @@
     repo: "deb http://deb.debian.org/debian buster-backports main"
     state: "{{ 'present' if (ansible_distribution_version | int <= 10) else 'absent' }}"
     update_cache: yes
+  become: true
   tags:
     - wg-install
 
@@ -12,16 +13,19 @@
     name:
       - "linux-headers-{{ ansible_kernel }}"
     state: present
-    
+  become: true
+
 - name: (Debian) Install additional packages
   apt:
     name: "{{ wireguard_additional_packages_debian }}"
     state: present
+  become: true
   when: wireguard_additional_packages_debian is defined and wireguard_additional_packages_debian|length>0
 
 - name: (Debian) Get architecture
   command: "dpkg --print-architecture"
   register: wireguard__fact_dpkg_arch
+  become: true
   changed_when: False
 
 - name: (Debian) Install kernel headers metapackage to ensure headers will be installed
@@ -29,6 +33,7 @@
     name:
       - "linux-headers-{{ wireguard__fact_dpkg_arch.stdout }}"
     state: present
+  become: true
   when: ('-cloud-' not in ansible_kernel)
 
 - name: (Debian) Install WireGuard packages
@@ -36,5 +41,6 @@
     name:
       - "wireguard"
     state: present
+  become: true
   tags:
     - wg-install
