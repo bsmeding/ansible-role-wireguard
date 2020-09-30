@@ -20,6 +20,7 @@
       retries: 10
       delay: 10
       failed_when: wireguard_module_enabled is failure
+      become: true
       tags:
         - wg-install
   when: not ansible_os_family == 'Darwin'
@@ -27,6 +28,7 @@
 - name: Register if config/private key already exists on target host
   stat:
     path: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
+  become: true
   register: wireguard__register_config_file
   tags:
     - wg-generate-keys
@@ -49,6 +51,7 @@
   - name: Generate WireGuard private key
     command: "wg genkey"
     register: wireguard__register_private_key
+    become: true
     changed_when: false
     tags:
       - wg-generate-keys
@@ -64,6 +67,7 @@
   - name: Read WireGuard config file
     slurp:
       src: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
+    become: true
     register: wireguard__register_config
     tags:
       - wg-config
@@ -80,6 +84,7 @@
   args:
     stdin: "{{ wireguard__fact_private_key }}"
   register: wireguard__register_public_key
+  become: true
   changed_when: false
   tags:
     - wg-config
@@ -95,6 +100,7 @@
     dest: "{{ wireguard_remote_directory }}"
     state: directory
     mode: 0700
+  become: true
   tags:
     - wg-config
 
@@ -105,6 +111,7 @@
     owner: "{{ wireguard_conf_owner }}"
     group: "{{ wireguard_conf_group }}"
     mode: "{{ wireguard_conf_mode }}"
+  become: true
   tags:
     - wg-config
   notify:
@@ -114,6 +121,7 @@
   file:
     dest: "{{ wireguard_remote_directory }}/.reload-module-on-update"
     state: absent
+  become: true
   tags:
     - wg-config
 
@@ -122,4 +130,5 @@
     name: "wg-quick@{{ wireguard_interface }}"
     state: started
     enabled: yes
+  become: true
   when: not ansible_os_family == 'Darwin'
