@@ -21,6 +21,8 @@ wireguard_conf_group: "{{ 'root' if not ansible_os_family == 'Darwin' else 'whee
 # The default mode of the wg.conf file
 wireguard_conf_mode: 0600
 
+# Template name to use
+wireguard_interface_template: "wg.conf.j2"
 
 #######################################
 # Settings only relevant for Ubuntu

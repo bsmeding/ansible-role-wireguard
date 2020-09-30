@@ -100,7 +100,7 @@
 
 - name: Generate WireGuard configuration file
   template:
-    src: etc/wireguard/wg.conf.j2
+    src: "etc/wireguard/{{ wireguard_interface_template }}"
     dest: "{{ wireguard_remote_directory }}/{{ wireguard_interface }}.conf"
     owner: "{{ wireguard_conf_owner }}"
     group: "{{ wireguard_conf_group }}"
