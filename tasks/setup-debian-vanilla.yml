@@ -15,13 +15,6 @@
     state: present
   become: true
 
-- name: (Debian) Install additional packages
-  apt:
-    name: "{{ wireguard_additional_packages_debian }}"
-    state: present
-  become: true
-  when: wireguard_additional_packages_debian is defined and wireguard_additional_packages_debian|length>0
-
 - name: (Debian) Get architecture
   command: "dpkg --print-architecture"
   register: wireguard__fact_dpkg_arch

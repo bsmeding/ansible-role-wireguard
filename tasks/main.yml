@@ -131,4 +131,21 @@
     state: started
     enabled: yes
   become: true
+  ignore_errors: True
+  register: start_wg_service
   when: not ansible_os_family == 'Darwin'
+
+- name: Restart service when erro
+  shell: 'wg-quick down {{ wireguard_interface }}'
+  become: true
+  when: start_wg_service.failed
+
+- name: Start and enable WireGuard service
+  service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: started
+    enabled: yes
+  become: true
+  ignore_errors: True
+  register: start_wg_service
+  when: not ansible_os_family == 'Darwin' and start_wg_service.failed
