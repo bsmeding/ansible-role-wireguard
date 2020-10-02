@@ -125,6 +125,8 @@
       dest: "{{playbook_dir}}/{{ wireguard_save_copy_of_config_to }}"
       state: directory
       mode: 0700
+    run_once: True
+    delegate_to: localhost
     become: false
     tags:
       - wg-config
@@ -134,6 +136,7 @@
       src: "etc/wireguard/{{ wireguard_interface_template }}"
       dest: "{{playbook_dir}}/{{ wireguard_save_copy_of_config_to }}/{{ inventory_hostname}}_{{ wireguard_interface }}.conf"
     become: false
+    delegate_to: localhost
     tags:
       - wg-config
   when: wireguard_save_copy_of_config_to is defined and wireguard_save_copy_of_config_to|length>1
