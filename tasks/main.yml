@@ -125,7 +125,7 @@
       dest: "{{playbook_dir}}/{{ wireguard_save_copy_of_config_to }}"
       state: directory
       mode: 0700
-    become: true
+    become: false
     tags:
       - wg-config
 
