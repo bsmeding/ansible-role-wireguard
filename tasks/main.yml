@@ -117,6 +117,28 @@
   notify:
     - reconfigure wireguard
 
+## CHECK IF LOCAL COPY IS NEEDED
+- name: Save local copy of client configuration
+  block:
+  - name: Create WireGuard configuration directory
+    file:
+      dest: "{{playbook_dir}}/{{ wireguard_save_copy_of_config_to }}"
+      state: directory
+      mode: 0700
+    become: true
+    tags:
+      - wg-config
+
+  - name: Generate WireGuard configuration file
+    template:
+      src: "etc/wireguard/{{ wireguard_interface_template }}"
+      dest: "{{playbook_dir}}/{{ wireguard_save_copy_of_config_to }}/{{ inventory_hostname}}_{{ wireguard_interface }}.conf"
+    become: false
+    tags:
+      - wg-config
+  when: wireguard_save_copy_of_config_to is defined and wireguard_save_copy_of_config_to|length>1
+
+
 - name: Ensure legacy reload-module-on-update is absent
   file:
     dest: "{{ wireguard_remote_directory }}/.reload-module-on-update"

@@ -24,6 +24,7 @@ wireguard_conf_mode: 0600
 # Template name to use
 wireguard_interface_template: "wg.conf.j2"
 
+wireguard_save_copy_of_config_to: ''  # When not empty, a copy of client config will be saved at this location
 #######################################
 # Settings only relevant for Ubuntu
 #######################################
